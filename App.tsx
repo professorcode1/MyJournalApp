@@ -6,28 +6,32 @@
  */
 
 import React from 'react';
-import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
   ScrollView,
-  StatusBar,
-  StyleSheet,
   Text,
-  useColorScheme,
   View,
 } from 'react-native';
+import { useAppSelector } from './src/redux/store';
+import { SCREEN_NAME_TO_SCREEN_COMPONENT_MAP } from './src/pages/screen';
+import {store} from './src/redux/store'
+import { Provider } from 'react-redux'
 
-
+function Screen(): JSX.Element {
+  const screen_name = useAppSelector(s => s.screen)
+  const ScreenJSX = SCREEN_NAME_TO_SCREEN_COMPONENT_MAP.get(screen_name)!
+  return <ScreenJSX />
+}
 function App(): JSX.Element {
 
-  return (
-    <SafeAreaView >
-      <ScrollView>
-        <View>
-            <Text>Hello World</Text>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+  return (  
+    <Provider store={store}>
+      <SafeAreaView >
+        <ScrollView>
+        <Screen />
+        </ScrollView>
+      </SafeAreaView>
+    </Provider>
   );
 }
 
