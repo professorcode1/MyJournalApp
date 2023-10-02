@@ -19,6 +19,7 @@ import { Provider } from 'react-redux'
 function Screen(): JSX.Element {
   const screen_name = useAppSelector(s => s.screen)
   const ScreenJSX = SCREEN_NAME_TO_SCREEN_COMPONENT_MAP.get(screen_name)!
+  console.log("Mounting screen ::\t", screen_name )
   return <ScreenJSX />
 }
 function App(): JSX.Element {
@@ -27,7 +28,7 @@ function App(): JSX.Element {
     <Provider store={store}>
       <SafeAreaView >
         <ScrollView>
-        <Screen />
+          <Screen />
         </ScrollView>
       </SafeAreaView>
     </Provider>
