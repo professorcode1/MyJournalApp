@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { EScreen } from '../pages/screen'
 export const screenSlice = createSlice({
   name: 'screen',
-  initialState:"WAIT" as EScreen, 
+  initialState:"LANDING" as EScreen, 
   reducers: {
     setScreen: (state:EScreen, data:PayloadAction<EScreen>) => {
       return data.payload
