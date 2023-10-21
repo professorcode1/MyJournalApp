@@ -26,11 +26,7 @@ function App(): JSX.Element {
 
   return (  
     <Provider store={store}>
-      <SafeAreaView >
-        <ScrollView>
           <Screen />
-        </ScrollView>
-      </SafeAreaView>
     </Provider>
   );
 }

@@ -2,10 +2,13 @@ import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import screenReducer from "./screen"
 import passwordReducer from "./password"
+import currentEntryReducer from "./current_entry"
+
 const store = configureStore({
   reducer: {
-    screen: screenReducer,
-    password: passwordReducer
+      screen: screenReducer,
+      password: passwordReducer,
+      currentEntry:currentEntryReducer
     }
 })
 
