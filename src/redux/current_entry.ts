@@ -7,36 +7,29 @@ interface IDiaryEntryDiscrete{
   type:EDiaryEntry
 }
 interface IDiaryEntry{
-  name:string
   entries:IDiaryEntryDiscrete[]
   date:string
   tldr:string
-  notes:string
+  notes:string,
+  importance:number
 }
 
 const EmptyDiaryEntry:IDiaryEntry = {
-  name:"",
   entries:[],
   date:(new Date()).toLocaleDateString('en-GB') ,
   tldr:"",
-  notes:""
+  notes:"",
+  importance:50
 }
+
+type EDiaryEntryKeys = keyof IDiaryEntry
 
 export const createEntrySlice = createSlice({
   name: 'create_entry',
   initialState:EmptyDiaryEntry , 
   reducers: {
-      updateName:(state, newName:PayloadAction<string>)=>{
-        return {...state, name:newName.payload}
-      },
-      updateDate:(state, newDate:PayloadAction<string>)=>{
-        return {...state, date:newDate.payload}
-      },
-      updateTLDR:(state, newTLDR:PayloadAction<string>)=>{
-        return {...state, tldr:newTLDR.payload}
-      },
-      updateNotes:(state, newNotes:PayloadAction<string>)=>{
-        return {...state, notes:newNotes.payload}
+      updateSingleAttributeOfDiaryEntry:(state, newEntry:PayloadAction<{entry_name:EDiaryEntryKeys, value:string|number}>) => {
+        return {...state, [newEntry.payload.entry_name]:newEntry.payload.value}
       },
       appendEntry:(state, newEntry:PayloadAction<IDiaryEntryDiscrete>)=>{
         return {...state, entries: [...state.entries, newEntry.payload]}
@@ -46,11 +39,8 @@ export const createEntrySlice = createSlice({
 )
 
 export const { 
-  updateName,
-  updateDate,
-  updateTLDR,
-  updateNotes,
-  appendEntry
+  updateSingleAttributeOfDiaryEntry,
+  appendEntry,
 } = createEntrySlice.actions
 
 export default createEntrySlice.reducer

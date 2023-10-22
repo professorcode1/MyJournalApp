@@ -2,7 +2,7 @@ import { Landing } from "./Landing";
 import { Homepage } from "./Homepage";
 import * as React from 'react'
 import { Waiting } from "./Waiting";
-import { CreateEntryScreen } from "./CreateEntry";
+import { CreateEntryScreen } from "./CreateEntry/CreateEntry";
 const SCREENS = ["LANDING", "HOME", "WAIT", "CREATE_ENTRY"] as const
 type EScreen = typeof SCREENS[number]
 
