@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-
+import { catimage } from './catimage'
 const DIARY_ENTRY_TYPES = ["IMAGE", "TEXT"] as const 
 type EDiaryEntry = typeof DIARY_ENTRY_TYPES[number]
 interface IDiaryEntryDiscrete{
@@ -15,7 +15,7 @@ interface IDiaryEntry{
 }
 
 const EmptyDiaryEntry:IDiaryEntry = {
-  entries:[],
+  entries:[{content:catimage, type:"IMAGE"}, {content:"hello word", type:"TEXT"}],
   date:(new Date()).toLocaleDateString('en-GB') ,
   tldr:"",
   notes:"",
@@ -44,3 +44,5 @@ export const {
 } = createEntrySlice.actions
 
 export default createEntrySlice.reducer
+
+export type {IDiaryEntryDiscrete }
