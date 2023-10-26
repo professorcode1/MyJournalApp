@@ -16,6 +16,7 @@ import { useAppSelector } from './src/redux/store';
 import { SCREEN_NAME_TO_SCREEN_COMPONENT_MAP } from './src/pages/screen';
 import {store} from './src/redux/store'
 import { Provider } from 'react-redux'
+import { print_all_file_names } from './src/io/filesyste';
 function Screen(): JSX.Element {
   const screen_name = useAppSelector(s => s.screen)
   const ScreenJSX = SCREEN_NAME_TO_SCREEN_COMPONENT_MAP.get(screen_name)!
@@ -23,7 +24,11 @@ function Screen(): JSX.Element {
   return <ScreenJSX />
 }
 function App(): JSX.Element {
-
+  React.useEffect(()=>{
+    (async ()=>{
+      print_all_file_names()
+    })()
+  },[])
   return (  
     <Provider store={store}>
           <Screen />

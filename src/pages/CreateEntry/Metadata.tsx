@@ -98,10 +98,18 @@ const Metadata : React.FC<{}> = () => {
                 numericKeyboard={true} 
                 name='Importance' 
                 value={String(importance)} 
-                onChange={newImportance => dispatcher(updateSingleAttributeOfDiaryEntry({
-                    entry_name:"importance",
-                    value:newImportance
-                }))} 
+                onChange={newImportance => {
+                    let newImp;
+                    if(isNaN(Number(newImportance))){
+                        newImp = 0;
+                    }else{
+                        newImp = newImportance
+                    }
+                    dispatcher(updateSingleAttributeOfDiaryEntry({
+                        entry_name:"importance",
+                        value:newImp
+                    }))
+                }} 
             />
             
         </View>
