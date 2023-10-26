@@ -41,8 +41,17 @@ export const createEntrySlice = createSlice({
       updateSingleAttributeOfDiaryEntry:(state, newEntry:PayloadAction<{entry_name:EDiaryEntryKeys, value:string|number}>) => {
         return {...state, [newEntry.payload.entry_name]:newEntry.payload.value}
       },
-      appendEntry:(state, newEntry:PayloadAction<IDiaryEntryDiscrete>)=>{
-        return {...state, entries: [...state.entries, newEntry.payload]}
+      appendTextEntry:(state, entry:PayloadAction<string>) => {
+        return {...state, entries:[...state.entries, {
+          content:entry.payload,
+          type:"TEXT"
+        }]}
+      },
+      appendImageEntry:(state, entry:PayloadAction<string>) => {
+        return {...state, entries:[...state.entries, {
+          content:entry.payload,
+          type:"IMAGE"
+        }]}
       }
     }
   }
@@ -50,7 +59,8 @@ export const createEntrySlice = createSlice({
 
 export const { 
   updateSingleAttributeOfDiaryEntry,
-  appendEntry,
+  appendTextEntry,
+  appendImageEntry
 } = createEntrySlice.actions
 
 export default createEntrySlice.reducer
