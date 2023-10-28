@@ -12,6 +12,7 @@ import {store} from './src/redux/store'
 import { Provider } from 'react-redux'
 import { print_all_file_names } from './src/io/filesyste';
 import { delete_all_entries } from './src/io/entries';
+import { delete_password_file } from './src/io/first_open';
 function Screen(): JSX.Element {
   const screen_name = useAppSelector(s => s.screen)
   const ScreenJSX = SCREEN_NAME_TO_SCREEN_COMPONENT_MAP.get(screen_name)!
@@ -21,7 +22,9 @@ function Screen(): JSX.Element {
 function App(): JSX.Element {
   React.useEffect(()=>{
     (async ()=>{
-
+      // await delete_password_file()
+      // await delete_all_entries()
+      // await print_all_file_names()
     })()
   },[])
   return (  

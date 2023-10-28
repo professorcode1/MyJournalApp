@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 export const passwordSlice = createSlice({
   name: 'password',
-  initialState:"12345", 
+  initialState:"", 
   reducers: {
     setPassword: (state:string, data:PayloadAction<string>) => {
       return data.payload
