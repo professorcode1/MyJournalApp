@@ -13,7 +13,7 @@ import { MainEntry } from './MainEntry';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { setScreen } from '../../redux/screen';
 import { loadEmptyEntry } from '../../redux/current_entry';
-import { write_entry_to_disk } from '../../io/create_entry';
+import { write_entry_to_disk } from '../../io/entries';
 
 const SubmitAndDiscardButtons:React.FC<{}> = () => {
     const dispatcher = useAppDispatch()

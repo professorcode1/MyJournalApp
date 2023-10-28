@@ -1,5 +1,5 @@
 import { Landing } from "./Landing";
-import { Homepage } from "./Homepage";
+import { Homepage } from "./Homepage/Homepage";
 import * as React from 'react'
 import { Waiting } from "./Waiting";
 import { CreateEntryScreen } from "./CreateEntry/CreateEntry";
