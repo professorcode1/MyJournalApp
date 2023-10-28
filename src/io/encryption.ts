@@ -2,15 +2,11 @@ import CryptoES from 'crypto-es';
 const RANDOM_STRING_LENGTH = 200
 
 function encrpyt_message(message:string, key:string):string{
-    console.log("message", message)
     const encrypted_message = CryptoES.AES.encrypt(JSON.stringify({message}), key).toString()
-    console.log("encrypted_message", encrypted_message)
     return encrypted_message;
 }
-function check_key_matches_message(message:string, key:string):boolean{
-    let decrypt_message;
-    try {       
-    decrypt_message = JSON.parse(
+function decrypt_message(message:string, key:string){
+    return JSON.parse(
         CryptoES.AES.decrypt(
             message, 
             key
@@ -18,6 +14,11 @@ function check_key_matches_message(message:string, key:string):boolean{
             CryptoES.enc.Utf8
         )
     ).message;
+}
+function check_key_matches_message(message:string, key:string):boolean{
+    let decrypted_message;
+    try {       
+        decrypted_message = decrypt_message(message, key)
     } catch (error) {
         return false;
     }
@@ -26,7 +27,7 @@ function check_key_matches_message(message:string, key:string):boolean{
         return false
     }
     const HEX_ARRAY = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F']
-    for(const char of decrypt_message){
+    for(const char of decrypted_message){
         if(!HEX_ARRAY.includes(char)){
             return false;
         }
@@ -34,4 +35,4 @@ function check_key_matches_message(message:string, key:string):boolean{
     return true;
 }
 
-export {encrpyt_message, check_key_matches_message, RANDOM_STRING_LENGTH}
+export {encrpyt_message, check_key_matches_message, RANDOM_STRING_LENGTH, decrypt_message}

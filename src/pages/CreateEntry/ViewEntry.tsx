@@ -8,11 +8,26 @@ import {
   } from 'react-native';
 import {Metadata} from "./Metadata"
 import { MainEntry } from './MainEntry';
-import { useAppDispatch } from '../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { setScreen } from '../../redux/screen';
+import { Waiting } from '../Waiting';
+import { decryptCurrentEntryInplace } from '../../redux/current_entry';
 
 const ViewEntryScreen : React.FC<{}> = () =>{
     const dispatcher = useAppDispatch()
+    const [waiting,setWaiting] = React.useState(true)
+    const password = useAppSelector(s => s.password)
+    React.useEffect(()=>{
+        (async ()=>{
+            await new Promise(r => setTimeout(r, 100));
+            dispatcher(decryptCurrentEntryInplace(password))
+            await new Promise(r => setTimeout(r, 100));
+            setWaiting(false)
+        })()
+    },[])
+    if(waiting){
+        return <Waiting />
+    }
     return (
 
         <View className='bg-theme-blue h-screen flex flex-col justify-center pt-8'>
@@ -29,6 +44,7 @@ const ViewEntryScreen : React.FC<{}> = () =>{
             </SafeAreaView >
         </View>
     )
+
 } 
 
 export {ViewEntryScreen}

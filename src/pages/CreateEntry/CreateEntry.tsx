@@ -14,8 +14,9 @@ import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { setScreen } from '../../redux/screen';
 import { loadEmptyEntry } from '../../redux/current_entry';
 import { write_entry_to_disk } from '../../io/entries';
+import { Waiting } from '../Waiting';
 
-const SubmitAndDiscardButtons:React.FC<{}> = () => {
+const SubmitAndDiscardButtons:React.FC<{setWaiting:(i:boolean)=>void}> = ({setWaiting}) => {
     const dispatcher = useAppDispatch()
     const entry = useAppSelector(s => s.currentEntry)
     const password = useAppSelector(s => s.password)
@@ -26,7 +27,10 @@ const SubmitAndDiscardButtons:React.FC<{}> = () => {
         if(entry.importance > 100 || entry.importance<0){
             return Alert.alert("Invalid Importance", `Importance should be b/w 0 and 100 included, right now its ${entry.importance}`)
         }
+        setWaiting(true)
+        await new Promise(r => setTimeout(r, 100));
         await write_entry_to_disk(entry, password)
+        setWaiting(false)
         dispatcher(setScreen("HOME"))
 
     }
@@ -46,22 +50,29 @@ const SubmitAndDiscardButtons:React.FC<{}> = () => {
 
 const CreateEntryScreen : React.FC<{}> = () =>{
     const dispatcher = useAppDispatch()
+    const [waiting, setWaiting] = React.useState(false)
     React.useEffect(()=>{
         dispatcher(loadEmptyEntry())
     },[])
-    return (
-        <KeyboardAwareScrollView>
+    if(!waiting){
 
-        <View className='bg-theme-blue h-screen flex flex-col justify-center pt-8'>
-            <SafeAreaView >    
-                <ScrollView >
-                    <MainEntry />
-                    <Metadata />
-                    <SubmitAndDiscardButtons />
-                </ ScrollView >
-            </SafeAreaView >
-        </View>
-        </KeyboardAwareScrollView>
+        return (
+            <KeyboardAwareScrollView>
+
+                <View className='bg-theme-blue h-screen flex flex-col justify-center pt-8'>
+                    <SafeAreaView >    
+                        <ScrollView >
+                            <MainEntry />
+                            <Metadata />
+                            <SubmitAndDiscardButtons setWaiting={setWaiting} />
+                        </ ScrollView >
+                    </SafeAreaView >
+                </View>
+            </KeyboardAwareScrollView>
+        )
+    }
+    return (
+        <Waiting />
     )
 } 
 

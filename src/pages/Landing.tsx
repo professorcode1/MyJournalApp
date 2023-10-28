@@ -85,7 +85,6 @@ const Landing : React.FC<{}> = () =>{
     }
     React.useEffect(()=>{
         (async ()=>{
-            console.log("calling is_this_apps_first_open")
             // await delete_password_file()
             setFirstOpen(await is_this_apps_first_open())
             setWaiting(false)

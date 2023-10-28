@@ -26,11 +26,6 @@ async function get_all_entries_for_this_month(month:number, year:number){
         const entry:IDiaryEntry=  JSON.parse(await read_file_from_fs(entry_file))
         const [_,entry_month,entry_year] = entry.date.split('/').map(Number)
         if(entry_month === month && entry_year == year){
-            for(const entry_discrete of entry.entries){
-                if(entry_discrete.type === "TEXT"){
-                    console.log(entry_discrete.content)
-                }
-            }
             return entry
         }else{
             return null

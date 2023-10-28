@@ -57,7 +57,7 @@ const HomeCalendar:React.FC<{}> = () => {
                     <ScrollView horizontal>
                         {(entriesMap.get(selectedDate) || []).map((entry,index) => {
                             return (
-                                <TouchableOpacity className="rounded-full h-8 w-8 m-1 p-1 border border-black" style={{
+                                <TouchableOpacity key={`KEY_PROP_FOR_REACT_LIST_OF_ENTRIES_IN_ENTRY_SELECTOR_HOMEPAGE${index}`} className="rounded-full h-8 w-8 m-1 p-1 border border-black" style={{
                                     backgroundColor:importanceColormap.current(entry.importance/100.0)
                                 }}
                                 onPress={()=>{

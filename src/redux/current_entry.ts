@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { decrypt_message } from '../io/encryption'
 const DIARY_ENTRY_TYPES = ["IMAGE", "TEXT"] as const 
 type EDiaryEntry = typeof DIARY_ENTRY_TYPES[number]
 interface IDiaryEntryDiscrete{
@@ -47,6 +48,19 @@ export const createEntrySlice = createSlice({
       },
       loadEntry:(state, entry:PayloadAction<IDiaryEntry>)=>{
         return entry.payload
+      },
+      decryptCurrentEntryInplace:(state, key:PayloadAction<string>)=>{
+        const result:IDiaryEntry = JSON.parse(JSON.stringify(EmptyDiaryEntry))
+        if(state.notes){
+          result.notes = decrypt_message(state.notes, key.payload)
+        }
+        if(state.tldr){
+          result.tldr = decrypt_message(state.tldr, key.payload)
+        }
+        result.importance = state.importance
+        result.date = state.date
+        result.entries = state.entries.map(discrete_entry => {return {type:discrete_entry.type, content:decrypt_message(discrete_entry.content, key.payload)}})
+        return result
       }
     }
   }
@@ -57,7 +71,8 @@ export const {
   appendTextEntry,
   appendImageEntry,
   loadEmptyEntry,
-  loadEntry
+  loadEntry,
+  decryptCurrentEntryInplace
 } = createEntrySlice.actions
 
 export default createEntrySlice.reducer
