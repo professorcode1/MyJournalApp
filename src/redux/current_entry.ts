@@ -44,6 +44,9 @@ export const createEntrySlice = createSlice({
       },
       loadEmptyEntry:(state)=>{
         return {...EmptyDiaryEntry,date:(new Date()).toLocaleDateString('en-GB') }
+      },
+      loadEntry:(state, entry:PayloadAction<IDiaryEntry>)=>{
+        return entry.payload
       }
     }
   }
@@ -53,7 +56,8 @@ export const {
   updateSingleAttributeOfDiaryEntry,
   appendTextEntry,
   appendImageEntry,
-  loadEmptyEntry
+  loadEmptyEntry,
+  loadEntry
 } = createEntrySlice.actions
 
 export default createEntrySlice.reducer

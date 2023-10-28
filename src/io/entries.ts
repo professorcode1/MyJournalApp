@@ -1,14 +1,17 @@
 import { IDiaryEntry } from "../redux/current_entry";
 import { encrpyt_message } from "./encryption";
 import { create_file, delete_file, get_all_file_names, read_file_from_fs } from "./filesyste";
-async function write_entry_to_disk(entry:IDiaryEntry, key:string){
+async function write_entry_to_disk(entry_input:IDiaryEntry, key:string){
+    const entry = JSON.parse(JSON.stringify(entry_input))
     if(entry.tldr !== undefined){
         entry.tldr = encrpyt_message(entry.tldr, key)
     }
     if(entry.notes !== undefined){
         entry.notes = encrpyt_message(entry.notes, key)
     }
-   entry.entries.forEach(discrete_entry => discrete_entry.content = encrpyt_message(discrete_entry.content, key))
+   entry.entries.forEach(function(discrete_entry, index, array) {
+    array[index].content = encrpyt_message(discrete_entry.content, key)
+   });
    const filename = "EntryAT"+String(+(new Date()))+".json"
    await create_file(filename, JSON.stringify(entry))
 }
@@ -23,6 +26,11 @@ async function get_all_entries_for_this_month(month:number, year:number){
         const entry:IDiaryEntry=  JSON.parse(await read_file_from_fs(entry_file))
         const [_,entry_month,entry_year] = entry.date.split('/').map(Number)
         if(entry_month === month && entry_year == year){
+            for(const entry_discrete of entry.entries){
+                if(entry_discrete.type === "TEXT"){
+                    console.log(entry_discrete.content)
+                }
+            }
             return entry
         }else{
             return null

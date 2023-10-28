@@ -3,12 +3,16 @@ import {Calendar} from 'react-native-calendars';
 import { 
     View,
     Text,
-    ActivityIndicator 
+    ActivityIndicator, 
+    ScrollView,
+    TouchableOpacity
 } from "react-native";
 import { MarkedDates } from "react-native-calendars/src/types";
 import { get_all_entries_for_this_month,convert_entries_array_to_map } from "../../io/entries";
 import interpolate from "color-interpolate";
-import { IDiaryEntry } from "../../redux/current_entry";
+import { IDiaryEntry, loadEntry } from "../../redux/current_entry";
+import { useAppDispatch } from "../../redux/store";
+import { setScreen } from "../../redux/screen";
 const HomeCalendar:React.FC<{}> = () => {
     const [markedDates,setMarkedDates] = React.useState<MarkedDates|null>(null)
     const [selectedDate, setSelectedDate] = React.useState<string|null>(null)
@@ -27,6 +31,7 @@ const HomeCalendar:React.FC<{}> = () => {
     React.useEffect(()=>{
         populateEntries(new Date( ))
     }, [])
+    const dispatcher = useAppDispatch()
     return (
         <View className="w-full bg-white p-1 relative ">
             <View className={ markedDates === null ? "opacity-25" : ""}>
@@ -38,13 +43,35 @@ const HomeCalendar:React.FC<{}> = () => {
                     className="m-1"
                     markedDates={markedDates}
                     onDayPress={input=>{
-                        console.log(input)
+                        setSelectedDate(input.dateString.split('-').reverse().join('/'))
                     }}
                     onMonthChange={input=>{
                         setMarkedDates(null)
                         populateEntries(new Date(input.dateString))
+                        setSelectedDate(null)
                     }}
-                    />
+                />
+                {selectedDate !== null && (
+                <View className="m-1 border-t border-black mt-2 pt-2 ml-1">
+                    <Text className="text-xl">Entries on {selectedDate}</Text>
+                    <ScrollView horizontal>
+                        {(entriesMap.get(selectedDate) || []).map((entry,index) => {
+                            return (
+                                <TouchableOpacity className="rounded-full h-8 w-8 m-1 p-1 border border-black" style={{
+                                    backgroundColor:importanceColormap.current(entry.importance/100.0)
+                                }}
+                                onPress={()=>{
+                                    dispatcher(loadEntry(entry))
+                                    dispatcher(setScreen("VIEW_ENTRY"))
+                                }}
+                                >
+                                    <Text className="text-center text-white" >{index+1}</Text>
+                                </TouchableOpacity>
+                            )
+                        })}
+                    </ScrollView>
+                </View>
+                )}
             </View>
             {markedDates === null && 
                 <ActivityIndicator size="large" className="absolute top-1/2 left-1/2 opacity-100 " />}

@@ -180,7 +180,11 @@ const SingleEntry:React.FC<{data:IDiaryEntryDiscrete, index:number, selected:boo
     return null
 }
 
-const EntriesList:React.FC<{setSelectedEntry:(n:number)=>void, selectedEntry:number}> = ({setSelectedEntry, selectedEntry}) => {
+const EntriesList:React.FC<{
+    setSelectedEntry:(n:number)=>void, 
+    selectedEntry:number,
+    viewOnly:boolean
+}> = ({setSelectedEntry, selectedEntry, viewOnly}) => {
     const style = {width: PLUS_ICON_SIZE, height: PLUS_ICON_SIZE}
     const style1 = {width: PLUS_ICON_SIZE+2, height: PLUS_ICON_SIZE+2}
     const entries = useAppSelector(s => s.currentEntry.entries)
@@ -194,7 +198,7 @@ const EntriesList:React.FC<{setSelectedEntry:(n:number)=>void, selectedEntry:num
                     <SingleEntry data={data} index={index} selected={index === selectedEntry} />
                 </TouchableOpacity>
             )}
-            <TouchableOpacity onPress={()=>setSelectedEntry(null)}>
+            {viewOnly || <TouchableOpacity onPress={()=>setSelectedEntry(null)}>
                 <View className='rounded-full border border-black m-1' style={style1}>
                     <Image 
                         source={require("../../../assets/plus.jpg")}
@@ -204,15 +208,16 @@ const EntriesList:React.FC<{setSelectedEntry:(n:number)=>void, selectedEntry:num
                         resizeMode={'cover'}
                         />
                 </View>
-            </TouchableOpacity>
+            </TouchableOpacity>}
         </ScrollView>
         </View>
         </>
     )
 }
 
-const MainEntry : React.FC<{}> = () => {
-    const [selectedEntry,setSelectedEntry] = React.useState<number|null>(null)
+const MainEntry : React.FC<{viewOnly?:boolean}> = ({viewOnly}) => {
+    viewOnly = viewOnly === undefined ? false : viewOnly
+    const [selectedEntry,setSelectedEntry] = React.useState<number|null>(viewOnly ? 0 : null)
     return (
         <View className='border border-black m-4 bg-white relative' style={{
             height:700
@@ -223,7 +228,7 @@ const MainEntry : React.FC<{}> = () => {
             }}>
                 <SelectedEntry index={selectedEntry} setSelectedEntry={setSelectedEntry} />
             </View>
-            <EntriesList selectedEntry={selectedEntry} setSelectedEntry={setSelectedEntry}  />
+            <EntriesList selectedEntry={selectedEntry} setSelectedEntry={setSelectedEntry} viewOnly={viewOnly}  />
         </View>
     )
 }

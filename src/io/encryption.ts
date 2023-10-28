@@ -2,7 +2,9 @@ import CryptoES from 'crypto-es';
 const RANDOM_STRING_LENGTH = 200
 
 function encrpyt_message(message:string, key:string):string{
+    console.log("message", message)
     const encrypted_message = CryptoES.AES.encrypt(JSON.stringify({message}), key).toString()
+    console.log("encrypted_message", encrypted_message)
     return encrypted_message;
 }
 function check_key_matches_message(message:string, key:string):boolean{

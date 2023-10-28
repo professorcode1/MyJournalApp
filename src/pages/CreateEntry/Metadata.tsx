@@ -17,17 +17,21 @@ const MetaDataSingleInput: React.FC<{
     name:string, 
     value:string, 
     onChange:(text:string)=>void,
-    numericKeyboard:boolean
+    numericKeyboard?:boolean,
+    viewOnly:boolean
 }> = (props) => {
+    props.numericKeyboard = props.numericKeyboard === undefined ? false : props.numericKeyboard
     return (
     <>
             <Text className='m-4 text-xl mb-1'> {props.name}</Text>
-            <TextInput className='border border-black m-4 p-4 mt-0 mb-0 rounded-md text-base ' 
+            {props.viewOnly || <TextInput className='border border-black m-4 p-4 mt-0 mb-0 rounded-md text-base ' 
                     value={props.value}
                     onChangeText={props.onChange}
                     multiline={true}
                     keyboardType={props.numericKeyboard ? "numeric" : "default"}
-                />
+                />}
+            {props.viewOnly && <Text className='border border-black m-4 p-4 mt-0 mb-0 rounded-md text-base ' >
+            {props.value}</Text>}
     </>
 )}
 
@@ -66,18 +70,28 @@ const DateInput: React.FC<{}> = (props) => {
 }
 
 
-const Metadata : React.FC<{}> = () => {
+const Metadata : React.FC<{viewOnly?:boolean}> = ({viewOnly}) => {
     const {
+        date,
         importance,
         tldr,
         notes} = useAppSelector(s => s.currentEntry)
     const dispatcher = useAppDispatch()
+    viewOnly = viewOnly === undefined ? false : viewOnly
     return (
         <View className='border border-black bg-white m-4 pb-4'>
 
-            <DateInput />
+            {viewOnly || <DateInput />}
+            {viewOnly  && <MetaDataSingleInput
+                viewOnly={true}
+                value={date}
+                onChange={(t)=>{}}
+                name='Date'
+             />}
+
+
             <MetaDataSingleInput 
-                numericKeyboard={false} 
+                viewOnly={viewOnly}
                 name='TLDR' 
                 value={tldr} 
                 onChange={newTLDR => dispatcher(updateSingleAttributeOfDiaryEntry({
@@ -86,8 +100,8 @@ const Metadata : React.FC<{}> = () => {
                 }))} 
             />
             <MetaDataSingleInput 
-                numericKeyboard={false} 
                 name='Notes' 
+                viewOnly={viewOnly}
                 value={notes} 
                 onChange={newNotes => dispatcher(updateSingleAttributeOfDiaryEntry({
                     entry_name:"notes",
@@ -96,6 +110,7 @@ const Metadata : React.FC<{}> = () => {
             />
             <MetaDataSingleInput 
                 numericKeyboard={true} 
+                viewOnly={viewOnly}
                 name='Importance' 
                 value={String(importance)} 
                 onChange={newImportance => {
