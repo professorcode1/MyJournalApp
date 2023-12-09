@@ -4,7 +4,8 @@ import {
     ScrollView,
     SafeAreaView ,
     TouchableOpacity,
-    Text
+    Text,
+    BackHandler
   } from 'react-native';
 import {Metadata} from "./Metadata"
 import { MainEntry } from './MainEntry';
@@ -24,6 +25,13 @@ const ViewEntryScreen : React.FC<{}> = () =>{
             await new Promise(r => setTimeout(r, 100));
             setWaiting(false)
         })()
+
+
+        const backhandler = BackHandler.addEventListener("hardwareBackPress", ()=>{
+            dispatcher(setScreen("HOME"))
+            return true
+        })
+        return () => backhandler.remove()
     },[])
     if(waiting){
         return <Waiting />
@@ -35,6 +43,9 @@ const ViewEntryScreen : React.FC<{}> = () =>{
                 <ScrollView >
                     <MainEntry viewOnly />
                     <Metadata viewOnly />
+                    <TouchableOpacity className='border border-black m-4 bg-white relative bg-yellow-500'>
+                        <Text className='text-2xl text-white text-center w-full'>Edit Entry</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity className='bg-green-400 h-full w-full rounded-lg p-1' onPress={()=>{
                         dispatcher(setScreen("HOME"))
                     }}  >

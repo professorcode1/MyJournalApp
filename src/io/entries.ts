@@ -2,7 +2,7 @@ import { IDiaryEntry } from "../redux/current_entry";
 import { encrpyt_message } from "./encryption";
 import { create_file, delete_file, get_all_file_names, read_file_from_fs } from "./filesyste";
 async function write_entry_to_disk(entry_input:IDiaryEntry, key:string){
-    const entry = JSON.parse(JSON.stringify(entry_input))
+    const entry:typeof entry_input = JSON.parse(JSON.stringify(entry_input))
     if(entry.tldr !== undefined){
         entry.tldr = encrpyt_message(entry.tldr, key)
     }
@@ -12,7 +12,11 @@ async function write_entry_to_disk(entry_input:IDiaryEntry, key:string){
    entry.entries.forEach(function(discrete_entry, index, array) {
     array[index].content = encrpyt_message(discrete_entry.content, key)
    });
-   const filename = "EntryAT"+String(+(new Date()))+".json"
+    if(entry.filename === null){
+       entry.filename = "EntryAT"+String(+(new Date()))+".json"
+    }
+    const {filename} = entry
+    console.log(filename, entry)
    await create_file(filename, JSON.stringify(entry))
 }
 async function get_all_entries_file_names(){

@@ -12,6 +12,7 @@ interface IDiaryEntry{
   tldr?:string
   notes?:string,
   importance:number
+  filename:string|null
 }
 
 const EmptyDiaryEntry:IDiaryEntry = {
@@ -19,7 +20,8 @@ const EmptyDiaryEntry:IDiaryEntry = {
   date:(new Date()).toLocaleDateString('en-GB') ,
   tldr:"",
   notes:"",
-  importance:50
+  importance:50,
+  filename:null
 }
 
 type EDiaryEntryKeys = keyof IDiaryEntry

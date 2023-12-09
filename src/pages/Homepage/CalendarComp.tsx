@@ -58,6 +58,8 @@ const HomeCalendar:React.FC<{}> = () => {
     React.useEffect(()=>{
         if(markedDates === null){ //first render of homepage
             populateEntries(new Date())
+        }else{
+            populateEntries(new Date(currentMonthDate))
         }
     }, [])
     console.log(currentMonthDate)
