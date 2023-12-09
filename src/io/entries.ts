@@ -16,7 +16,6 @@ async function write_entry_to_disk(entry_input:IDiaryEntry, key:string){
        entry.filename = "EntryAT"+String(+(new Date()))+".json"
     }
     const {filename} = entry
-    console.log(filename, entry)
    await create_file(filename, JSON.stringify(entry))
 }
 async function get_all_entries_file_names(){

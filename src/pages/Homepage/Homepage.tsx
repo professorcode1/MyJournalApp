@@ -7,6 +7,7 @@ import {
 import { useAppDispatch } from '../../redux/store';
 import { setScreen } from '../../redux/screen';
 import { HomeCalendar } from './CalendarComp';
+import { loadEmptyEntry } from '../../redux/current_entry';
 const Homepage : React.FC<{}> = () =>{
     const dispatcher = useAppDispatch()
     return (
@@ -16,7 +17,10 @@ const Homepage : React.FC<{}> = () =>{
 
             <TouchableOpacity 
                 className='bg-white rounded-lg p-2 border-blue-400 border-2 w-full'
-                onPress={()=>{dispatcher(setScreen("CREATE_ENTRY"))}}
+                onPress={()=>{
+                    dispatcher(loadEmptyEntry())
+                    dispatcher(setScreen("CREATE_ENTRY"))
+                }}
             >
                 <Text className='text-xl text-center'>
                     Create Entry  

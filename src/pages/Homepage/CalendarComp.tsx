@@ -62,7 +62,6 @@ const HomeCalendar:React.FC<{}> = () => {
             populateEntries(new Date(currentMonthDate))
         }
     }, [])
-    console.log(currentMonthDate)
     return (
         <View className="w-full bg-white p-1 relative ">
             <View className={ markedDates === null ? "opacity-25" : ""}>

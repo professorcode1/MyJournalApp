@@ -12,7 +12,7 @@ import { MainEntry } from './MainEntry';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { setScreen } from '../../redux/screen';
 import { Waiting } from '../Waiting';
-import { decryptCurrentEntryInplace } from '../../redux/current_entry';
+import { decryptCurrentEntryInplace, loadEmptyEntry } from '../../redux/current_entry';
 
 const ViewEntryScreen : React.FC<{}> = () =>{
     const dispatcher = useAppDispatch()
@@ -31,7 +31,9 @@ const ViewEntryScreen : React.FC<{}> = () =>{
             dispatcher(setScreen("HOME"))
             return true
         })
-        return () => backhandler.remove()
+        return () => {
+            backhandler.remove()
+        }
     },[])
     if(waiting){
         return <Waiting />
@@ -43,7 +45,9 @@ const ViewEntryScreen : React.FC<{}> = () =>{
                 <ScrollView >
                     <MainEntry viewOnly />
                     <Metadata viewOnly />
-                    <TouchableOpacity className='border border-black m-4 bg-white relative bg-yellow-500'>
+                    <TouchableOpacity className='border border-black m-4 bg-white relative bg-yellow-500' onPress={()=>{
+                        dispatcher(setScreen("CREATE_ENTRY"))
+                    }}>
                         <Text className='text-2xl text-white text-center w-full'>Edit Entry</Text>
                     </TouchableOpacity>
                     <TouchableOpacity className='bg-green-400 h-full w-full rounded-lg p-1' onPress={()=>{

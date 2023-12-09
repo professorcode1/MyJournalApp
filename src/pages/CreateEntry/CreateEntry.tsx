@@ -51,9 +51,6 @@ const SubmitAndDiscardButtons:React.FC<{setWaiting:(i:boolean)=>void}> = ({setWa
 const CreateEntryScreen : React.FC<{}> = () =>{
     const dispatcher = useAppDispatch()
     const [waiting, setWaiting] = React.useState(false)
-    React.useEffect(()=>{
-        dispatcher(loadEmptyEntry())
-    },[])
     if(!waiting){
 
         return (

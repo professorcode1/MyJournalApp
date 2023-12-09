@@ -62,6 +62,7 @@ export const createEntrySlice = createSlice({
         result.importance = state.importance
         result.date = state.date
         result.entries = state.entries.map(discrete_entry => {return {type:discrete_entry.type, content:decrypt_message(discrete_entry.content, key.payload)}})
+        result.filename = state.filename
         return result
       }
     }
