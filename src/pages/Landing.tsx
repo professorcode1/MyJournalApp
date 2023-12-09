@@ -38,7 +38,7 @@ const InputPassword:React.FC<IInputPassword> = (props) => {
             </View>
             <View className='  border-4 rounded-lg bg-white border-green-400 mt-10 flex flex-col p-10' >
                 <Text className='text-xl font-extrabold'>{props.title}</Text>
-                <TextInput className='border border-black mt-4 rounded-md' 
+                <TextInput className='border border-black mt-4 rounded-md p-1' 
                     secureTextEntry={true}
                     value={props.passwordInput}
                     onChangeText={props.setPasswordInput}

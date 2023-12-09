@@ -12,6 +12,7 @@ import {
   } from 'react-native';
 import { updateSingleAttributeOfDiaryEntry } from '../../redux/current_entry';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import Slider from "react-native-slider";
 
 const MetaDataSingleInput: React.FC<{
     name:string, 
@@ -69,6 +70,25 @@ const DateInput: React.FC<{}> = (props) => {
     )
 }
 
+const ImportanceInput: React.FC<{}> = () =>{
+    const importance = useAppSelector(s => s.currentEntry.importance)
+    const dispatcher = useAppDispatch()
+    return (
+        <View >
+            <Text className='m-4 text-xl mb-1'>Importance :: {importance}%</Text>
+            <Slider
+                className='m-4 p-4 mt-0 mb-0'
+                value={importance/100.0}
+                onValueChange={(newImp)=>{
+                    dispatcher(updateSingleAttributeOfDiaryEntry({
+                        entry_name:"importance",
+                        value:Math.floor(newImp * 100.0)
+                    }));
+                }}
+            />
+        </View>
+    )
+}
 
 const Metadata : React.FC<{viewOnly?:boolean}> = ({viewOnly}) => {
     const {
@@ -108,24 +128,7 @@ const Metadata : React.FC<{viewOnly?:boolean}> = ({viewOnly}) => {
                     value:newNotes
                 }))} 
             />
-            <MetaDataSingleInput 
-                numericKeyboard={true} 
-                viewOnly={viewOnly}
-                name='Importance' 
-                value={String(importance)} 
-                onChange={newImportance => {
-                    let newImp;
-                    if(isNaN(Number(newImportance))){
-                        newImp = 0;
-                    }else{
-                        newImp = newImportance
-                    }
-                    dispatcher(updateSingleAttributeOfDiaryEntry({
-                        entry_name:"importance",
-                        value:newImp
-                    }))
-                }} 
-            />
+            <ImportanceInput />
             
         </View>
     )
