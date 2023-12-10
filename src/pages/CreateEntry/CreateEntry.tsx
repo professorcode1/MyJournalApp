@@ -24,8 +24,9 @@ const SubmitAndDiscardButtons:React.FC<{setWaiting:(i:boolean)=>void}> = ({setWa
         if(entry.entries.length === 0){
             return Alert.alert("No entries made!", "Plase make some entries before hitting submit")
         }
-        if(entry.importance > 100 || entry.importance<0){
-            return Alert.alert("Invalid Importance", `Importance should be b/w 0 and 100 included, right now its ${entry.importance}`)
+        console.log(entry.tldr, typeof entry.tldr)
+        if(typeof entry.tldr !== "string" || entry.tldr.length === 0 ){
+            return Alert.alert("Invalid TLDR", `Please write a summary. Summary is an important part of journaling`)
         }
         setWaiting(true)
         await new Promise(r => setTimeout(r, 100));
