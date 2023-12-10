@@ -52,6 +52,7 @@ const SubmitAndDiscardButtons:React.FC<{setWaiting:(i:boolean)=>void}> = ({setWa
 const CreateEntryScreen : React.FC<{}> = () =>{
     const dispatcher = useAppDispatch()
     const [waiting, setWaiting] = React.useState(false)
+    const current_entry = useAppSelector(s => s.currentEntry)
     if(!waiting){
 
         return (
@@ -60,7 +61,7 @@ const CreateEntryScreen : React.FC<{}> = () =>{
                 <View className='bg-theme-blue h-screen flex flex-col justify-center pt-8'>
                     <SafeAreaView >    
                         <ScrollView >
-                            <MainEntry />
+                            <MainEntry currentEntry={current_entry} />
                             <Metadata />
                             <SubmitAndDiscardButtons setWaiting={setWaiting} />
                         </ ScrollView >

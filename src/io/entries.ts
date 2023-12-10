@@ -51,4 +51,51 @@ async function delete_all_entries(){
     await Promise.all((await get_all_entries_file_names()).map(file_name => delete_file(file_name, false)))
 }
 
-export {write_entry_to_disk, get_all_entries_for_this_month, delete_all_entries, convert_entries_array_to_map}
+function get_previous_and_next_entry(
+    entiresMap:{[key:string]:IDiaryEntry[]}, current_entry:IDiaryEntry
+):[IDiaryEntry|null, IDiaryEntry|null]{
+    const date_string_to_date:(date_string:string)=>Date = (date_string) => new Date(date_string.split('/').reverse().join('-'))
+    const current_entry_index_in_its_parent_day_array = entiresMap[current_entry.date].findIndex((e) => e.filename === current_entry.filename)
+    const this_entires_date_object = date_string_to_date(current_entry.date)
+    let previous_entry:IDiaryEntry|null = null, 
+        next_entry:IDiaryEntry|null = null;
+    if(current_entry_index_in_its_parent_day_array > 0){
+        previous_entry = entiresMap[current_entry.date][current_entry_index_in_its_parent_day_array -1];
+    }else{
+
+        const potential_previous_entires = Object.keys(entiresMap).map(date_string_to_date).filter(
+            date_ => date_ < this_entires_date_object
+        ).sort()
+        if(potential_previous_entires.length > 0){
+            const previous_entry_date = potential_previous_entires[potential_previous_entires.length-1]
+            const previous_entires_ = entiresMap[previous_entry_date.toLocaleDateString('en-GB')]
+            previous_entry = previous_entires_[previous_entires_.length -1]
+        }
+    }
+
+    if(current_entry_index_in_its_parent_day_array < (entiresMap[current_entry.date].length - 1)){
+        next_entry = entiresMap[current_entry.date][current_entry_index_in_its_parent_day_array+1]
+    }else{
+        const potential_next_entires = Object.keys(entiresMap).map(
+            date_string_to_date
+        ).filter(
+            date_ => date_ > this_entires_date_object
+        ).sort()
+        if(potential_next_entires.length > 0){
+            const next_entry_date = potential_next_entires[0]
+            const next_entries = entiresMap[next_entry_date.toLocaleDateString('en-GB')]
+            next_entry = next_entries[0]
+        }
+    }
+
+    return [previous_entry, next_entry]
+}
+
+
+export {
+    write_entry_to_disk, 
+    get_all_entries_for_this_month, 
+    delete_all_entries, 
+    convert_entries_array_to_map,
+    get_previous_and_next_entry
+}

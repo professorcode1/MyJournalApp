@@ -12,7 +12,7 @@ import {
     Modal
   } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { IDiaryEntryDiscrete,EDiaryEntry, appendTextEntry, appendImageEntry} from '../../redux/current_entry';
+import { IDiaryEntryDiscrete,EDiaryEntry, appendTextEntry, appendImageEntry, IDiaryEntry} from '../../redux/current_entry';
 import { Camera } from 'expo-camera';
 import { delete_file } from '../../io/filesyste';
 const PLUS_ICON_SIZE = 60
@@ -183,11 +183,11 @@ const SingleEntry:React.FC<{data:IDiaryEntryDiscrete, index:number, selected:boo
 const EntriesList:React.FC<{
     setSelectedEntry:(n:number)=>void, 
     selectedEntry:number,
-    viewOnly:boolean
-}> = ({setSelectedEntry, selectedEntry, viewOnly}) => {
+    viewOnly:boolean,
+    entries:IDiaryEntryDiscrete[]
+}> = ({setSelectedEntry, selectedEntry, viewOnly, entries}) => {
     const style = {width: PLUS_ICON_SIZE, height: PLUS_ICON_SIZE}
     const style1 = {width: PLUS_ICON_SIZE+2, height: PLUS_ICON_SIZE+2}
-    const entries = useAppSelector(s => s.currentEntry.entries)
     
     return (
         <>
@@ -215,8 +215,13 @@ const EntriesList:React.FC<{
     )
 }
 
-const MainEntry : React.FC<{viewOnly?:boolean}> = ({viewOnly}) => {
+const MainEntry : React.FC<{
+    viewOnly?:boolean, 
+    selectedEntryCB?:(_:number)=>void
+    currentEntry:IDiaryEntry
+}> = ({viewOnly, selectedEntryCB, currentEntry}) => {
     viewOnly = viewOnly === undefined ? false : viewOnly
+    selectedEntryCB = selectedEntryCB === undefined ? (_)=>{} : selectedEntryCB
     const [selectedEntry,setSelectedEntry] = React.useState<number|null>(viewOnly ? 0 : null)
     return (
         <View className='border border-black m-4 bg-white relative' style={{
@@ -228,7 +233,15 @@ const MainEntry : React.FC<{viewOnly?:boolean}> = ({viewOnly}) => {
             }}>
                 <SelectedEntry index={selectedEntry} setSelectedEntry={setSelectedEntry} />
             </View>
-            <EntriesList selectedEntry={selectedEntry} setSelectedEntry={setSelectedEntry} viewOnly={viewOnly}  />
+            <EntriesList 
+                selectedEntry={selectedEntry} 
+                setSelectedEntry={(entry_index) => {
+                    setSelectedEntry(entry_index);
+                    selectedEntryCB(entry_index);
+                }} 
+                viewOnly={viewOnly}
+                entries={currentEntry.entries} 
+            />
         </View>
     )
 }
