@@ -70,7 +70,7 @@ const DateInput: React.FC<{}> = (props) => {
     )
 }
 
-const ImportanceInput: React.FC<{viewOnly:boolean}> = ({viewOnly}) =>{
+const ImportanceInput: React.FC<{}> = () =>{
     const importance = useAppSelector(s => s.currentEntry.importance)
     const dispatcher = useAppDispatch()
     return (
@@ -79,7 +79,6 @@ const ImportanceInput: React.FC<{viewOnly:boolean}> = ({viewOnly}) =>{
             <Slider
                 className='m-4 p-4 mt-0 mb-0'
                 value={importance/100.0}
-                disabled={viewOnly}
                 onValueChange={(newImp)=>{
                     dispatcher(updateSingleAttributeOfDiaryEntry({
                         entry_name:"importance",
@@ -102,12 +101,7 @@ const Metadata : React.FC<{viewOnly?:boolean}> = ({viewOnly}) => {
         <View className='border border-black bg-white m-4 pb-4'>
 
             {viewOnly || <DateInput />}
-            {viewOnly  && <MetaDataSingleInput
-                viewOnly={true}
-                value={date}
-                onChange={(t)=>{}}
-                name='Date'
-             />}
+
 
 
             <MetaDataSingleInput 
@@ -128,7 +122,7 @@ const Metadata : React.FC<{viewOnly?:boolean}> = ({viewOnly}) => {
                     value:newNotes
                 }))} 
             />
-            <ImportanceInput viewOnly={viewOnly} />
+            {viewOnly || <ImportanceInput />}
             
         </View>
     )
