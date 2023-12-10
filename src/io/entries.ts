@@ -23,10 +23,13 @@ async function get_all_entries_file_names(){
     const entries_file = file_list.filter(file_name => file_name.match(/^EntryAT\d+\.json$/) !== null)
     return entries_file
 }
-async function get_all_entries_for_this_month(month:number, year:number){
+async function get_all_entries_for_this_month(month:number, year:number):Promise<IDiaryEntry[]>{
     const entries_file = await get_all_entries_file_names()
     const entries_file_of_month = entries_file.map(async entry_file => {
         const entry:IDiaryEntry=  JSON.parse(await read_file_from_fs(entry_file))
+        if(entry.filename === undefined){
+            entry.filename = entry_file
+        }
         const [_,entry_month,entry_year] = entry.date.split('/').map(Number)
         if(entry_month === month && entry_year == year){
             return entry
