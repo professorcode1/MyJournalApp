@@ -7,7 +7,7 @@ import interpolate from "color-interpolate";
 interface IHomepage{
     currentMonthDate:string,
     markedDates:MarkedDates|null
-    entriesMap:Object|null
+    entriesMap:{[key:string]:IDiaryEntry[]}|null
 }
 
 const InitialHomePage:IHomepage = {
